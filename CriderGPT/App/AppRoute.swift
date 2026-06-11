@@ -1,0 +1,45 @@
+import Foundation
+
+enum AppRoute: Hashable {
+    case dashboard
+    case chat
+    case visionMemory
+    case livestockID
+    case receipts
+    case agentSwarm
+    case voiceStudio
+    case sharedSpending
+    case ffaCenter
+    case calendar
+    case calculators
+    case files
+    case gallery
+    case projects
+    case media
+    case music
+    case aiImages
+    case studio3D
+    case guardian
+    case profile
+    case plan
+    case payment
+    case codeEditor
+    case zipToExeBuilder
+    case textureGenerator
+    case cloudGaming
+    case rdr2Guide
+    case usbHub
+    case sensors
+    case frequencyTools
+    case metadataEditor
+    case converter3D
+    case smartIDStore
+    case updates
+    case timeline
+    case memorial
+    case contact
+    case farmingSimulator
+    case adminPanel
+    case ideaPlanner
+    case devHub
+}
