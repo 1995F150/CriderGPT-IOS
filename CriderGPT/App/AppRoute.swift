@@ -35,11 +35,19 @@ enum AppRoute: Hashable {
     case converter3D
     case smartIDStore
     case updates
-    case timeline
-    case memorial
-    case contact
     case farmingSimulator
     case adminPanel
     case ideaPlanner
     case devHub
+    case systemDiagnostics
+    case farmBureau
+    case serverAIConsole
+    case selfRepair
+    case knowledgeVault
+    case agiDispatcher
+    case androidBuilder
+    case iosBuilder
+    case swiftGenerator
+    case businessCalculator
+    case blueprintGenerator
 }
