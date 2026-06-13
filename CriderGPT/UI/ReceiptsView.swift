@@ -32,7 +32,78 @@ struct ReceiptsView: View {
                         }
                         
                         Spacer()
+                        import SwiftUI
+
+struct ReceiptsView: View {
+    @StateObject private var service = ReceiptsService.shared
+    @State private var showingAddReceipt = false
+    
+    var body: some View {
+        NavigationView {
+            List {
+                if service.receipts.isEmpty && !service.isLoading {
+                    Section {
+                        Text("No receipts found. Tap + to add one.")
+                            .foregroundColor(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding()
+                    }
+                }
+                
+                ForEach(service.receipts) { receipt in
+                    HStack(spacing: 12) {
+                        AsyncImage(url: URL(string: receipt.image_url ?? "")) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } placeholder: {
+                            Color.gray.opacity(0.1)
+                        }
+                        .frame(width: 60, height: 60)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                         
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(receipt.merchant)
+                                .font(.headline)
+                            Text(receipt.date, style: .date)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Spacer()
+                        
+                        Text("$\(receipt.amount, specifier: "%.2f")")
+                            .font(.system(.body, design: .monospaced))
+                            .fontWeight(.bold)
+                    }
+                    .padding(.vertical, 4)
+                }
+            }
+            .navigationTitle("Receipts")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showingAddReceipt = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $showingAddReceipt) {
+                ReceiptAddView()
+            }
+            .onAppear {
+                Task {
+                    await service.fetchReceipts()
+                }
+            }
+            .refreshable {
+                await service.fetchReceipts()
+            }
+        }
+    }
+}
+
                         Text("$\(receipt.amount, specifier: "%.2f")")
                             .font(.system(.body, design: .monospaced))
                             .fontWeight(.bold)
