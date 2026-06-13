@@ -1,0 +1,20 @@
+name: iOS Build Validation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build CriderGPT scheme
+        run: |
+          set -e
+          echo "Note: CriderGPT.xcodeproj must exist in the repository for this step to succeed."
+          xcodebuild -scheme CriderGPT -project CriderGPT.xcodeproj -sdk iphoneos -configuration Release BUILD_DIR="$PWD/build" CODE_SIGNING_ALLOWED=NO
