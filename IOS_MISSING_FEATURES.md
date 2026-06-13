@@ -6,7 +6,12 @@ The following features from the web application are currently pending implementa
 - **Project Detail Views**: Deep dives into specific project data.
 - **Interactive Graphs**: Native SwiftUI charts for business metrics.
 # iOS Missing Features
-# iOS Missing Features# iOS Missing Features# iOS Missi# iOS Missing Features
+# iOS Missing Features# iOS Missing Features# iOS Mi# iOS Missing Features
+
+The following features from the web application are currently pending implementation in the native iOS app:
+
+- **Project Detail Views**: Deep dives into specific project data.
+- **Interactive Graphs**: Native SwiftUI charts for business metrics.ssi# iOS Missing Features
 
 The following features from the web application are currently pending implementation in the native iOS app:
 
