@@ -6,7 +6,43 @@
                 GenericBackendView(route: .serverAIConsole)
             case .selfRepair:
                 GenericBackendView(route: .selfRepair)
-            case .knowledgeVault:
+            case .knowledgeVault:import SwiftUI
+
+struct RouteDestinationView: View {
+    let route: AppRoute
+    
+    @ViewBuilder
+    var body: some View {
+        switch route {
+        case .dashboard:
+            DashboardView()
+        case .chat:
+            ChatScreenView()
+        case .visionMemory:
+            VisionMemoryView()
+        case .livestockID:
+            LivestockView()
+        case .receipts:
+            ReceiptsView()
+        case .knowledgeVault:
+            KnowledgeVaultView()
+        case .businessCalculator:
+            BusinessCalculatorView()
+        case .blueprintGenerator:
+            BlueprintGeneratorView()
+        case .profile:
+            ProfileView()
+        case .plan:
+            PlanView()
+        case .payment:
+            PaymentView()
+        case .login:
+            LoginView()
+        default:
+            GenericBackendView(route: route)
+        }
+    }
+}
                 GenericBackendView(route: .knowledgeVault)
             case .agiDispatcher:
                 GenericBackendView(route: .agiDispatcher)
