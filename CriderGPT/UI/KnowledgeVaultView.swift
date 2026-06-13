@@ -3,6 +3,12 @@ import SwiftUI
 struct KnowledgeVaultView: View {
     @State private var searchText = ""
     
+    struct KnowledgeArticle: Identifiable {
+        let id = UUID()
+        let title: String
+        let category: String
+    }
+    
     let articles = [
         KnowledgeArticle(title: "Farm Management Basics", category: "Operations"),
         KnowledgeArticle(title: "Supabase Integration Guide", category: "Technical"),
@@ -19,8 +25,10 @@ struct KnowledgeVaultView: View {
     }
     
     var body: some View {
-        List {
-            ForEach(filteredArticles) { article in
+        VStack {
+            SearchBar(text: $searchText)
+            
+            List(filteredArticles) { article in
                 VStack(alignment: .leading) {
                     Text(article.title)
                         .font(.headline)
@@ -28,16 +36,27 @@ struct KnowledgeVaultView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                .padding(.vertical, 4)
             }
         }
-        .searchable(text: $searchText, prompt: "Search Knowledge Vault")
         .navigationTitle("Knowledge Vault")
     }
 }
 
-struct KnowledgeArticle: Identifiable {
-    let id = UUID()
-    let title: String
-    let category: String
+struct SearchBar: View {
+    @Binding var text: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+            TextField("Search...", text: $text)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+        }
+        .padding()
+    }
+}
+
+#Preview {
+    NavigationView {
+        KnowledgeVaultView()
+    }
 }
