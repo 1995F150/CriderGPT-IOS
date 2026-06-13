@@ -1,5 +1,19 @@
 import Foundation
 import Supabase
+import UIKit
+
+struct Receipt: Codable, Identifiable {
+    var id: Int?
+    var merchant: String
+    var amount: Double
+    var date: Date
+    var image_url: String?
+    var created_at: Date?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, merchant, amount, date, image_url, created_at
+    }
+}
 
 class ReceiptsService: ObservableObject {
     static let shared = ReceiptsService()
@@ -12,59 +26,57 @@ class ReceiptsService: ObservableObject {
         self.client = client
     }
     
-    func uploadReceiptImage(data: Data, fileName: String) async throws -> String {
-        let storage = client.storage.from("receipts")
-        _ = try await storage.upload(
-            path: fileName,
-            file: data,
-            options: FileOptions(cacheControl: "3600", upsert: true)
-        )
+    func fetchReceipts() async {
+        DispatchQueue.main.async { self.isLoading = true }
+        defer { DispatchQueue.main.async { self.isLoading = false } }
         
-        let url = try storage.getPublicUrl(path: fileName)
-        return url.absoluteString
+        do {
+            let receipts: [Receipt] = try await client.database
+                .from("receipts")
+                .select()
+                .order("created_at", ascending: false)
+                .execute()
+                .value
+            
+            DispatchQueue.main.async {
+                self.receipts = receipts
+            }
+        } catch {
+            print("### Error fetching receipts: \(error)")
+        }
     }
     
-    func saveReceiptMetadata(title: String, amount: Double, date: Date, imageURL: String) async throws {
+    func uploadReceipt(image: UIImage, merchant: String, amount: Double, date: Date) async throws {
+        guard let data = image.jpegData(compressionQuality: 0.8) else {
+            throw NSError(domain: "ImageConversion", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to convert image to data"])
+        }
+        
+        let fileName = "\(UUID().uuidString).jpg"
+        let filePath = "receipts/\(fileName)"
+        
+        // 1. Upload to Supabase Storage
+        _ = try await client.storage
+            .from("receipts")
+            .upload(path: filePath, file: data, options: FileOptions(contentType: "image/jpeg"))
+        
+        // 2. Get Public URL
+        let publicURL = try client.storage
+            .from("receipts")
+            .getPublicUrl(path: filePath)
+        
+        // 3. Insert into Database
         let receipt = Receipt(
-            title: title,
+            merchant: merchant,
             amount: amount,
             date: date,
-            imageURL: imageURL,
-            userId: client.auth.session?.user.id
+            image_url: publicURL.absoluteString
         )
         
         try await client.database
             .from("receipts")
             .insert(receipt)
             .execute()
-    }
-    
-    func fetchReceipts() async throws {
-        isLoading = true
-        defer { isLoading = false }
         
-        let response: [Receipt] = try await client.database
-            .from("receipts")
-            .select()
-            .order("date", ascending: false)
-            .execute()
-            .value
-        
-        await MainActor.run {
-            self.receipts = response
-        }
-    }
-}
-
-struct Receipt: Codable, Identifiable {
-    var id: UUID?
-    let title: String
-    let amount: Double
-    let date: Date
-    let imageURL: String
-    let userId: UUID?
-    
-    enum CodingKeys: String, CodingKey {
-        case id, title, amount, date, userId = "user_id", imageURL = "image_url"
+        await fetchReceipts()
     }
 }
