@@ -1,0 +1,51 @@
+# iOS Build Status - Feature Inventory Summary
+
+- Dashboard
+- Chat
+- Vision Memory
+- Livestock ID
+- Receipts
+- Agent Swarm
+- Voice Studio
+- Shared Spending
+- FFA Center
+- Calendar
+- Calculators
+- Files
+- Gallery
+- Projects
+- Media
+- Music
+- AI Images
+- Studio 3D
+- Guardian
+- Profile
+- Plan
+- Payment
+- Code Editor
+- ZipToExe Builder
+- Texture Generator
+- Cloud Gaming
+- RDR2 Guide
+- USB Hub
+- Sensors
+- Frequency Tools
+- Metadata Editor
+- Converter 3D
+- Smart ID Store
+- Updates
+- Farming Simulator
+- Admin Panel
+- Idea Planner
+- Dev Hub
+- System Diagnostics
+- Farm Bureau
+- Server AI Console
+- Self Repair
+- Knowledge Vault
+- AGI Dispatcher
+- Android Builder
+- iOS Builder
+- Swift Generator
+- Business Calculator
+- Blueprint Generator
